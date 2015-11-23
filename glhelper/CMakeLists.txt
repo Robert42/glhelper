@@ -46,6 +46,7 @@ set(GLHELPER_SOURCE
   utils/pathutils.hpp
   vertexarrayobject.cpp
   vertexarrayobject.hpp
+  ${GLHELPER_CONFIG_FILE}
 )
 
 add_library(glhelper ${GLHELPER_SOURCE})

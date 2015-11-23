@@ -4,13 +4,9 @@ if(NOT GLHELPER_CONFIG_DIR)
 set(GLHELPER_CONFIG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/defaultconfig)
 endif()
 
-add_subdirectory(glhelper)
+set(GLHELPER_CONFIG_FILE ${GLHELPER_CONFIG_DIR}/glhelperconfig.hpp)
 
-target_sources(
-  glhelper
-  PRIVATE
-  ${GLHELPER_CONFIG_DIR}/glhelperconfig.hpp
-)
+add_subdirectory(glhelper)
 
 target_include_directories(
    glhelper
