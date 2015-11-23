@@ -43,3 +43,5 @@ set(GLHELPER_SOURCE
 )
 
 add_library(glhelper ${GLHELPER_SOURCE})
+
+target_compile_options(glhelper PUBLIC -std=c++11 -Wall -Wextra)
