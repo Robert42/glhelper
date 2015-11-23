@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
 
 project(glhelper)
 
+if(GLEW_ROOT)
+set(CMAKE_PREFIX_PATH ${GLEW_ROOT})
+endif()
+
+find_package(GLEW)
+
 set(GLHELPER_SOURCE
   buffer.cpp
   buffer.hpp
@@ -43,5 +49,9 @@ set(GLHELPER_SOURCE
 )
 
 add_library(glhelper ${GLHELPER_SOURCE})
+
+target_include_directories(glhelper PUBLIC ${GLEW_INCLUDE_DIRS})
+
+target_link_libraries(glhelper PUBLIC ${GLEW_LIBRARY})
 
 target_compile_options(glhelper PUBLIC -std=c++11)
