@@ -17,4 +17,5 @@ target_include_directories(
    SYSTEM
    PUBLIC
    ${GLHELPER_CONFIG_DIR}
+   ${CMAKE_CURRENT_SOURCE_DIR}
 )
