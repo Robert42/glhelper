@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
 
 project(glhelper)
 
-if(GLEW_ROOT)
-set(CMAKE_PREFIX_PATH ${GLEW_ROOT})
-endif()
-
 find_package(GLEW)
 
 set(GLHELPER_SOURCE
