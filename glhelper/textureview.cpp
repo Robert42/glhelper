@@ -8,7 +8,7 @@ namespace gl
 		m_originalTexture(_originalTexture),
 		m_newTarget(_newTarget)
 	{
-		// TODO: Validation checks.
+		// todo: Validation checks.
 
 		GL_CALL(glGenTextures, 1, &m_textureHandle);
 		GL_CALL(glTextureView, m_textureHandle, static_cast<GLenum>(_newTarget), _originalTexture.GetInternHandle(), gl::TextureFormatToGLSizedInternal[static_cast<unsigned int>(_newFormat)],
