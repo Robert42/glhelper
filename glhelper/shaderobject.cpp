@@ -1,4 +1,4 @@
-﻿#include "shaderobject.hpp"
+#include "shaderobject.hpp"
 #include "utils/pathutils.hpp"
 
 #include "buffer.hpp"
@@ -9,6 +9,56 @@
 
 namespace gl
 {
+
+  inline std::string parseIncludeFilepath(size_t& firstLimiter, size_t& filepathEnd, const std::string& sourceCode, size_t includePos, const std::string& relativePath, const std::string& shaderFilename)
+  {
+    const size_t quotMarksFirst = sourceCode.find("\"", includePos);
+    const size_t langleFirst = sourceCode.find("<", includePos);
+
+    // If an '"' comes before an '<', or an '<' wasn't found, assume an relative filepath
+    const bool relativeInclude = quotMarksFirst<langleFirst || langleFirst==std::string::npos;
+
+    firstLimiter = relativeInclude ? quotMarksFirst : langleFirst;
+
+    if(firstLimiter==std::string::npos)
+    {
+      GLHELPER_LOG_ERROR("Invalid #include directive in shader file " + shaderFilename + ". Expected \" or <");
+      return std::string();
+    }
+
+    const size_t filepathStart = firstLimiter + 1;
+
+    const char secondLimiterSymbol = relativeInclude ? '"' : '>';
+
+    filepathEnd = sourceCode.find(secondLimiterSymbol, filepathStart);
+    if (filepathEnd == std::string::npos)
+    {
+      GLHELPER_LOG_ERROR("Invalid #include directive in shader file " + shaderFilename + ". Expected " + secondLimiterSymbol);
+      return std::string();
+    }
+
+    size_t stringLength = filepathEnd - filepathStart;
+    if (stringLength == 0)
+    {
+      std::string limiters = relativeInclude ? "Quotation marks" : "Brackets";
+      GLHELPER_LOG_ERROR("Invalid #include directive in shader file " + shaderFilename + ". " + limiters + " empty!");
+      return std::string();
+    }
+
+    std::string includeCommand = sourceCode.substr(filepathStart, stringLength);
+    std::string includeFile;
+
+    if(relativeInclude)
+    {
+      includeFile = PathUtils::AppendPath(relativePath, includeCommand);
+    }else
+    {
+      includeFile = SHADER_EXPAND_GLOBAL_INCLUDE(includeCommand);
+    }
+
+    return std::move(includeFile);
+  }
+
 	/// Global event for changed shader files.
 	/// All Shader Objects will register upon this event. If any shader file is changed, just brodcast here!
 	//ezEvent<const std::string&> ShaderObject::s_shaderFileChangedEvent;
@@ -170,29 +220,10 @@ namespace gl
 			parseCursorPos = includePos;
 
 			// parse filepath
-			size_t quotMarksFirst = sourceCode.find("\"", includePos);
-			if (quotMarksFirst == std::string::npos)
-			{
-				GLHELPER_LOG_ERROR("Invalid #include directive in shader file " + _shaderFilename + ". Expected \"");
-				break;
-			}
-			size_t quotMarksLast = sourceCode.find("\"", quotMarksFirst + 1);
-			if (quotMarksLast == std::string::npos)
-			{
-				GLHELPER_LOG_ERROR("Invalid #include directive in shader file " + _shaderFilename + ". Expected \"");
-				break;
-			}
+			size_t quotMarksFirst;
+			size_t quotMarksLast;
 
-			size_t stringLength = quotMarksLast - quotMarksFirst - 1;
-			if (stringLength == 0)
-			{
-				GLHELPER_LOG_ERROR("Invalid #include directive in shader file " + _shaderFilename + ". Quotation marks empty!");
-				break;
-			}
-
-
-			std::string includeCommand = sourceCode.substr(quotMarksFirst + 1, stringLength);
-			std::string includeFile = PathUtils::AppendPath(relativePath, includeCommand);
+      std::string includeFile = parseIncludeFilepath(quotMarksFirst, quotMarksLast, sourceCode, includePos, relativePath, _shaderFilename);
 
 			// Check if already included, to avoid cycles.
 			if (_beforeIncludedFiles.find(includeFile) != _beforeIncludedFiles.end())
