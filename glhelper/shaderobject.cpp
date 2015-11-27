@@ -177,7 +177,7 @@ namespace gl
 				break;
 			}
 			size_t quotMarksLast = sourceCode.find("\"", quotMarksFirst + 1);
-			if (quotMarksFirst == std::string::npos)
+			if (quotMarksLast == std::string::npos)
 			{
 				GLHELPER_LOG_ERROR("Invalid #include directive in shader file " + _shaderFilename + ". Expected \"");
 				break;
