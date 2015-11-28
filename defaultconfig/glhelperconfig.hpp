@@ -89,7 +89,8 @@ namespace gl
 	typedef Details::DefaultMat4x4<float> Mat4;
 };
 
-
+// A std::vector of all include paths shaders will be looked for, if an #include<...> statement was found during parsing an glsl script
+#define SHADER_EXPAND_GLOBAL_INCLUDE(x) ""
 
 // OpenGL header.
 
