@@ -9,8 +9,7 @@ namespace gl
 		float position[2];
 	};
 
-	ScreenAlignedTriangle::ScreenAlignedTriangle(const Details::DefaultVec2<float>& min,
-	                                             const Details::DefaultVec2<float>& max)
+	ScreenAlignedTriangle::ScreenAlignedTriangle(const Vec2& min, const Vec2& max)
 	{
 		ScreenTriVertex screenTriangle[3];
 		screenTriangle[0].position[0] = min.x;

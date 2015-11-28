@@ -14,8 +14,7 @@ namespace gl
 		ScreenAlignedTriangle(const ScreenAlignedTriangle&) = delete;
 		void operator = (const ScreenAlignedTriangle&) = delete;
 
-		ScreenAlignedTriangle(const Details::DefaultVec2<float>& min=Details::DefaultVec2<float>(-1, -1),
-		                      const Details::DefaultVec2<float>& max=Details::DefaultVec2<float>(1, 1));
+		ScreenAlignedTriangle(const Vec2& min=Vec2(-1, -1), const Vec2& max=Vec2(1, 1));
 		~ScreenAlignedTriangle();
 
 		void Draw() const;
