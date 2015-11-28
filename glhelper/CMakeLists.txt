@@ -50,6 +50,6 @@ add_library(glhelper ${GLHELPER_SOURCE})
 
 target_include_directories(glhelper PUBLIC ${GLEW_INCLUDE_DIRS})
 
-target_link_libraries(glhelper PUBLIC ${GLEW_LIBRARY} ${OPENGL_gl_LIBRARY})
+target_link_libraries(glhelper PUBLIC ${GLEW_LIBRARY} ${OPENGL_gl_LIBRARY} ${GLHELPER_ADDITIONAL_LIBRARIES})
 
 target_compile_options(glhelper PUBLIC -std=c++11)
