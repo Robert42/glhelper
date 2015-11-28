@@ -14,11 +14,11 @@ namespace gl
 	{
 		ScreenTriVertex screenTriangle[3];
 		screenTriangle[0].position[0] = min.x;
-		screenTriangle[0].position[1] = max.y;
+		screenTriangle[0].position[1] = min.y;
 		screenTriangle[1].position[0] = max.x;
 		screenTriangle[1].position[1] = max.y;
 		screenTriangle[2].position[0] = min.x;
-		screenTriangle[2].position[1] = min.y;
+		screenTriangle[2].position[1] = max.y;
 
 		m_vertexBuffer = new Buffer(sizeof(screenTriangle), Buffer::UsageFlag::IMMUTABLE, screenTriangle);
 		m_vertexArrayObject = new VertexArrayObject({ VertexArrayObject::Attribute(VertexArrayObject::Attribute::Type::FLOAT, 2) });
