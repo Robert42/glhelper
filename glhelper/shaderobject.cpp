@@ -360,7 +360,7 @@ namespace gl
 	Result ShaderObject::CreateProgram()
 	{
 		// Create shader program
-		GLuint tempProgram = GL_RET_CALL(glCreateProgram);
+		GLuint tempProgram = GL_RET_CALL_NO_ARGS(glCreateProgram);
 
 		// attach programs
 		int numAttachedShader = 0;

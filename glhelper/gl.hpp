@@ -58,25 +58,36 @@ namespace gl
 		template<typename GlFunction, typename... Args>
 		Result CheckedGLCall(const char* openGLFunctionName, GlFunction openGLFunction, Args&&... args)
 		{
-			if (!CheckGLFunctionExistsAndReport(openGLFunctionName, openGLFunction))
+			if (!CheckGLFunctionExistsAndReport(openGLFunctionName, reinterpret_cast<const void*>(openGLFunction)))
 				return Result::FAILURE;
 			openGLFunction(args...);
 			return CheckGLError(openGLFunctionName);
 		}
+
+
+    template<typename T>
+    class R;
+
+    template<typename ReturnType, typename... Args>
+    class R<ReturnType(*)(Args...)>
+    {
+    public:
+      typedef ReturnType type;
+    };
 		
 
-		template<typename ReturnType, typename GlFunction, typename... Args>
-		ReturnType CheckedGLCall_Ret(const char* openGLFunctionName, GlFunction openGLFunction, Args&&... args)
+		template<typename GlFunction, typename... Args>
+		typename R<GlFunction>::type CheckedGLCall_Ret(const char* openGLFunctionName, GlFunction openGLFunction, Args&&... args)
 		{
-			if (!CheckGLFunctionExistsAndReport(openGLFunctionName, openGLFunction))
+			if (!CheckGLFunctionExistsAndReport(openGLFunctionName, reinterpret_cast<const void*>(openGLFunction)))
 				return 0;
-			ReturnType out = openGLFunction(args...);
+			typename R<GlFunction>::type out = openGLFunction(args...);
 			CheckGLError(openGLFunctionName);
 			return out;
 		}
 	}
 
-#ifdef _DEBUG
+#ifndef NDEBUG
 
 	/// Recommend way to call any OpenGL function. Will perform optional nullptr and glGetError checks during debug runs.
 #define GL_CALL(OpenGLFunction, ...) \
@@ -84,8 +95,13 @@ namespace gl
 
 	/// There are a few functions that have a return value (glGet, glIsX, glCreateShader, glCreateProgram). Use this macro for those.
 	/// \see GL_CALL
+#define GL_RET_CALL_NO_ARGS(OpenGLFunction) \
+	::gl::Details::CheckedGLCall_Ret(#OpenGLFunction, OpenGLFunction)
+
+  /// There are a few functions that have a return value (glGet, glIsX, glCreateShader, glCreateProgram). Use this macro for those.
+	/// \see GL_CALL
 #define GL_RET_CALL(OpenGLFunction, ...) \
-	::gl::Details::CheckedGLCall_Ret<decltype(OpenGLFunction(__VA_ARGS__))>(#OpenGLFunction, OpenGLFunction, __VA_ARGS__)
+	::gl::Details::CheckedGLCall_Ret(#OpenGLFunction, OpenGLFunction, __VA_ARGS__)
 
 #else
 
