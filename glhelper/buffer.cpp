@@ -6,6 +6,7 @@ namespace gl
 	Buffer::BufferBinding Buffer::s_boundVertexBuffers[s_numVertexBufferBindings];
 	Buffer::BufferBinding Buffer::s_boundUBOs[s_numUBOBindings];
 	Buffer::BufferBinding Buffer::s_boundSSBOs[s_numSSBOBindings];
+  Buffer::BufferBinding Buffer::s_boundAtomicCounters[s_numAtomicCounterBindings];
 	BufferId Buffer::s_boundIndexBuffer = 0;
 	BufferId Buffer::s_boundIndirectDrawBuffer = 0;
 	BufferId Buffer::s_boundIndirectDispatchBuffer = 0;
@@ -309,6 +310,22 @@ namespace gl
 			s_boundSSBOs[_bindingIndex].bufferObject = _buffer;
 			s_boundSSBOs[_bindingIndex].offset = _offset;
 			s_boundSSBOs[_bindingIndex].stride = _size;
+		}
+	}
+
+  void Buffer::BindAtomicCounterBuffer(BufferId _buffer, GLuint _bindingIndex, GLintptr _offset, GLsizeiptr _size)
+	{
+		GLHELPER_ASSERT(_bindingIndex < s_numAtomicCounterBindings, "Glhelper supports only " + std::to_string(s_numAtomicCounterBindings) +
+			" UBO bindings. See glGet with GL_MAX_COMBINED_ATOMIC_COUNTERS for actual hardware restrictions");
+
+		if (s_boundAtomicCounters[_bindingIndex].bufferObject != _buffer ||
+			s_boundAtomicCounters[_bindingIndex].offset != _offset ||
+			s_boundAtomicCounters[_bindingIndex].stride != _size)
+		{
+			GL_CALL(glBindBufferRange, GL_ATOMIC_COUNTER_BUFFER, _bindingIndex, _buffer, _offset, _size);
+			s_boundAtomicCounters[_bindingIndex].bufferObject = _buffer;
+			s_boundAtomicCounters[_bindingIndex].offset = _offset;
+			s_boundAtomicCounters[_bindingIndex].stride = _size;
 		}
 	}
 }

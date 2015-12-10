@@ -204,6 +204,23 @@ namespace gl
 		static void BindShaderStorageBuffer(BufferId _buffer, GLuint _bindingIndex, GLintptr _offset, GLsizeiptr _size);
 
 
+    /// \see Buffer::BindAtomicCounterBuffer
+		void BindAtomicCounterBuffer(GLuint _bindingIndex, GLintptr _offset, GLsizeiptr _size);
+		/// Binds entire buffer as atomic counter buffer.
+		/// \see Buffer::BindAtomicCounterBuffer
+		void BindAtomicCounterBuffer(GLuint _bindingIndex);
+
+		/// Binds as uniform buffer on a given slot if not already bound with the same parameters.
+		///
+		/// \param bindingIndex
+		//		The index of the buffer binding point to which to bind the buffer.
+		/// \param offset
+		///		The offset of the first element of the buffer.
+		/// \param size
+		///		The amount of data in machine units that can be read from the buffer object while used as an indexed target.
+		static void BindAtomicCounterBuffer(BufferId _buffer, GLuint _bindingIndex, GLintptr _offset, GLsizeiptr _size);
+
+
 		/// Binds as indirect draw buffer if not already bound with the same parameters.
 		void BindIndirectDrawBuffer();
 		/// Binds as indirect dispatch buffer if not already bound with the same parameters.
@@ -251,6 +268,10 @@ namespace gl
 		// Shader Storage buffer
 		static const unsigned int s_numSSBOBindings = 16; /// Arbitrary value, based on observation: http://delphigl.de/glcapsviewer/gl_stats_caps_single.php?listreportsbycap=GL_MAX_COMBINED_SHADER_STORAGE_BLOCKS
 		static BufferBinding s_boundSSBOs[s_numSSBOBindings];
+
+    // Atomic Counter buffer
+		static const unsigned int s_numAtomicCounterBindings = 16; /// Arbitrary value, based on observation: http://delphigl.de/glcapsviewer/gl_stats_caps_single.php?listreportsbycap=GL_MAX_COMBINED_ATOMIC_COUNTERS
+		static BufferBinding s_boundAtomicCounters[s_numAtomicCounterBindings];
 
 		// Indirect Draw
 		static BufferId s_boundIndirectDrawBuffer;
