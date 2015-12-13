@@ -74,7 +74,7 @@ namespace gl
 
 
     const unsigned int s_numUBOBindings = 64;	/// Arbitrary value based on observation: http://delphigl.de/glcapsviewer/gl_stats_caps_single.php?listreportsbycap=GL_MAX_COMBINED_UNIFORM_BLOCKS
-		const unsigned int s_numSSBOBindings = 16; /// Arbitrary value, based on observation: http://delphigl.de/glcapsviewer/gl_stats_caps_single.php?listreportsbycap=GL_MAX_COMBINED_SHADER_STORAGE_BLOCKS
+    const unsigned int s_numSSBOBindings = 16; /// Arbitrary value, based on observation: http://delphigl.de/glcapsviewer/gl_stats_caps_single.php?listreportsbycap=GL_MAX_COMBINED_SHADER_STORAGE_BLOCKS
     const unsigned int s_numAtomicCounterBindings = 8; /// Arbitrary value, based on observation: http://delphigl.de/glcapsviewer/gl_stats_caps_single.php?listreportsbycap=GL_MAX_COMBINED_ATOMIC_COUNTERS
 	}
 
