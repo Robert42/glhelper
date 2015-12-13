@@ -6,7 +6,6 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
-#include <regex>
 
 namespace gl
 {
@@ -51,10 +50,12 @@ namespace gl
     return std::to_string(index);
   }
 
+#ifndef SHADER_OVERRIDE_SHADER_ERROR_TEXT_FILTER
   std::string ShaderObject::FileIndex::filterErrorText(const std::string& text) const
   {
     return text;
   }
+#endif
 
 
 	inline std::string parseIncludeFilepath(size_t& firstLimiter, size_t& filepathEnd, const std::string& sourceCode, size_t includePos, const std::string& relativePath, const std::string& shaderFilename)
