@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <unordered_set>
 #include <unordered_map>
@@ -140,8 +140,10 @@ namespace gl
 		const std::unordered_map<std::string, ShaderType>& GetShaderFilenames() { return m_filesPerShaderType; }
 
 	private:
+    class FileIndex;
+
 		/// Print information about the compiling step
-		void PrintShaderInfoLog(ShaderId _shader, const std::string& _shaderName);
+		void PrintShaderInfoLog(ShaderId _shader, const std::string& _shaderName, FileIndex* fileIndex);
 		/// Print information about the linking step
 		void PrintProgramInfoLog(ProgramId _program);
 
@@ -149,10 +151,10 @@ namespace gl
 		/// \param fileIndex	This will used as second parameter for each #line macro. It is a kind of file identifier.
 		/// \remarks Uses a lot of potentially slow string operations.
 		static std::string ReadShaderFromFile(const std::string& shaderFilename, const std::string& prefixCode,
-												unsigned int fileIndex, std::unordered_set<std::string>& _beforeIncludedFiles, std::unordered_set<std::string>& _allReadFiles);
+												FileIndex* fileIndex, std::unordered_set<std::string>& _beforeIncludedFiles, std::unordered_set<std::string>& _allReadFiles);
 
 		/// Internal function called by AddShaderFromSource and AddShaderFromFile
-		Result AddShader(ShaderType _type, const std::string& _sourceCode, const std::string& _originName, const std::string& _prefixCode);
+		Result AddShader(ShaderType _type, const std::string& _sourceCode, const std::string& _originName, const std::string& _prefixCode, FileIndex* fileIndex);
 
 
 		/// queries uniform informations from the program
@@ -202,4 +204,21 @@ namespace gl
 		// - subroutines
 		// - atomic counter buffer
 	};
+
+
+  class ShaderObject::FileIndex
+  {
+  public:
+    FileIndex();
+
+    int getIndexForShaderName(const std::string& name);
+    int getIndexForPrefixCode();
+    std::string shaderNameForIndex(int index);
+
+    std::string filterErrorText(const std::string& text) const;
+
+  private:
+    std::unordered_map<std::string, int> _indexForShaderName;
+    std::unordered_map<int, std::string> _shaderNameForIndex;
+  };
 }

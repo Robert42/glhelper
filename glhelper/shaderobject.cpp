@@ -6,9 +6,56 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
+#include <regex>
 
 namespace gl
 {
+
+  const std::string prefixCodeName = "{fa848bef-fa29-48a0-9f19-a146ec44606f}";
+
+  ShaderObject::FileIndex::FileIndex()
+  {
+  }
+
+  int ShaderObject::FileIndex::getIndexForShaderName(const std::string& name)
+  {
+    auto i = _indexForShaderName.find(name);
+
+    if(i != _indexForShaderName.end())
+      return i->second;
+
+    int index = _indexForShaderName.size();
+
+    _indexForShaderName[name] = index;
+    _shaderNameForIndex[index] = name;
+
+    return index;
+  }
+
+  int ShaderObject::FileIndex::getIndexForPrefixCode()
+  {
+    return getIndexForShaderName(prefixCodeName);
+  }
+
+  std::string ShaderObject::FileIndex::shaderNameForIndex(int index)
+  {
+    auto i = _shaderNameForIndex.find(index);
+
+    if(i != _shaderNameForIndex.end())
+    {
+      if(prefixCodeName == i->second)
+        return "<Prefix Code>";
+      return i->second;
+    }
+
+    return std::to_string(index);
+  }
+
+  std::string ShaderObject::FileIndex::filterErrorText(const std::string& text) const
+  {
+    return text;
+  }
+
 
 	inline std::string parseIncludeFilepath(size_t& firstLimiter, size_t& filepathEnd, const std::string& sourceCode, size_t includePos, const std::string& relativePath, const std::string& shaderFilename)
 	{
@@ -127,13 +174,15 @@ namespace gl
 
 	Result ShaderObject::AddShaderFromFile(ShaderType _type, const std::string& _filename, const std::string& _prefixCode)
 	{
+    FileIndex fileIndex;
+
 		// load new code
 		std::unordered_set<std::string> includingFiles, allFiles;
-		std::string sourceCode = ReadShaderFromFile(_filename, _prefixCode, 0, includingFiles, allFiles);
+		std::string sourceCode = ReadShaderFromFile(_filename, _prefixCode, &fileIndex, includingFiles, allFiles);
 		if (sourceCode == "")
 			return Result::FAILURE;
 
-		Result result = AddShader(_type, sourceCode, _filename, _prefixCode);
+		Result result = AddShader(_type, sourceCode, _filename, _prefixCode, &fileIndex);
 
 		if (result != Result::FAILURE)
 		{
@@ -148,7 +197,7 @@ namespace gl
 	/// \param _beforeIncludedFiles
 	///		Does not include THIS file, but all files before.
 	std::string ShaderObject::ReadShaderFromFile(const std::string& _shaderFilename, const std::string& _prefixCode,
-												 unsigned int _fileIndex, std::unordered_set<std::string>& _beforeIncludedFiles, std::unordered_set<std::string>& _allReadFiles)
+												 FileIndex* _fileIndex, std::unordered_set<std::string>& _beforeIncludedFiles, std::unordered_set<std::string>& _allReadFiles)
 	{
 		// open file
 		std::ifstream file(_shaderFilename.c_str());
@@ -180,13 +229,11 @@ namespace gl
 		// Don't insert one if this is the main file, recognizable by a #version tag!
 		if (versionPos == std::string::npos)
 		{
-			insertionBuffer = "#line 1 " + std::to_string(_fileIndex) + "\n";
+			insertionBuffer = "#line 1 " + std::to_string(_fileIndex->getIndexForShaderName(_shaderFilename)) + "\n";
 			sourceCode.insert(0, insertionBuffer);
 			parseCursorPos = insertionBuffer.size();
 			parseCursorOriginalFileNumber = 1;
 		}
-
-		unsigned int lastFileIndex = _fileIndex;
 
 		// Prefix code (optional)
 		if (!_prefixCode.empty())
@@ -197,9 +244,9 @@ namespace gl
 				size_t nextLineIdx = sourceCode.find_first_of("\n", versionPos);
 				size_t numLinesBeforeVersion = std::count(sourceCode.begin(), sourceCode.begin() + versionPos, '\n');
 
-				insertionBuffer = "\n#line 1 " + std::to_string(++lastFileIndex) + "\n";
+				insertionBuffer = "\n#line 1 " + std::to_string(_fileIndex->getIndexForPrefixCode()) + "\n";
 				insertionBuffer += _prefixCode;
-				insertionBuffer += "\n#line " + std::to_string(numLinesBeforeVersion + 1) + " " + std::to_string(_fileIndex) + "\n";
+				insertionBuffer += "\n#line " + std::to_string(numLinesBeforeVersion + 1) + " " + std::to_string(_fileIndex->getIndexForShaderName(_shaderFilename)) + "\n";
 
 				sourceCode.insert(nextLineIdx, insertionBuffer);
 
@@ -242,8 +289,8 @@ namespace gl
         }
         else
         {
-          insertionBuffer = ReadShaderFromFile(includeFile, "", ++lastFileIndex, includedFilesNew, _allReadFiles);
-          insertionBuffer += "\n#line " + std::to_string(parseCursorOriginalFileNumber + 1) + " " + std::to_string(_fileIndex); // whitespace replaces #include!
+          insertionBuffer = ReadShaderFromFile(includeFile, "", _fileIndex, includedFilesNew, _allReadFiles);
+          insertionBuffer += "\n#line " + std::to_string(parseCursorOriginalFileNumber + 1) + " " + std::to_string(_fileIndex->getIndexForShaderName(_shaderFilename)); // whitespace replaces #include!
           sourceCode.replace(includePos, quotMarksLast - includePos + 1, insertionBuffer);
 
           parseCursorPos += insertionBuffer.size();
@@ -259,10 +306,10 @@ namespace gl
 
 	Result ShaderObject::AddShaderFromSource(ShaderType _type, const std::string& _sourceCode, const std::string& _originName)
 	{
-		return AddShader(_type, _sourceCode, _originName, "");
+		return AddShader(_type, _sourceCode, _originName, "", nullptr);
 	}
 
-	Result ShaderObject::AddShader(ShaderType _type, const std::string& _sourceCode, const std::string& _originName, const std::string& _prefixCode)
+	Result ShaderObject::AddShader(ShaderType _type, const std::string& _sourceCode, const std::string& _originName, const std::string& _prefixCode, FileIndex* fileIndex)
 	{
 		GLHELPER_ASSERT(_sourceCode != "", "Shader source code is empty!");
 		GLHELPER_ASSERT(_originName != "", "No shader origin given!");
@@ -320,7 +367,7 @@ namespace gl
 		}
 
 		// log output
-		PrintShaderInfoLog(shaderObjectTemp, _originName);
+		PrintShaderInfoLog(shaderObjectTemp, _originName, fileIndex);
 
 		// check result
 		if (result == Result::SUCCEEDED)
@@ -596,7 +643,7 @@ namespace gl
 		return Result::SUCCEEDED;
 	}
 
-	void ShaderObject::PrintShaderInfoLog(ShaderId _shader, const std::string& _shaderName)
+	void ShaderObject::PrintShaderInfoLog(ShaderId _shader, const std::string& _shaderName, FileIndex* fileIndex)
 	{
 #ifdef SHADER_COMPILE_LOGS
 		GLint infologLength = 0;
@@ -610,6 +657,9 @@ namespace gl
 
 		if (infoLog.size() > 0)
 		{
+      if(fileIndex != nullptr)
+        infoLog = fileIndex->filterErrorText(infoLog);
+
 			GLHELPER_LOG_ERROR("ShaderObject \"" + m_name + "\": Shader " + _shaderName + " compiled.Output:"); // Not necessarily an error - depends on driver.
 			GLHELPER_LOG_ERROR(infoLog);
 		}
