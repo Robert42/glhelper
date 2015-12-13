@@ -262,16 +262,13 @@ namespace gl
 		static BufferId s_boundIndexBuffer;
 
 		// Uniform buffer
-		static const unsigned int s_numUBOBindings = 64;	/// Arbitrary value based on observation: http://delphigl.de/glcapsviewer/gl_stats_caps_single.php?listreportsbycap=GL_MAX_COMBINED_UNIFORM_BLOCKS
-		static BufferBinding s_boundUBOs[s_numUBOBindings];
+		static BufferBinding s_boundUBOs[Details::s_numUBOBindings];
 
 		// Shader Storage buffer
-		static const unsigned int s_numSSBOBindings = 16; /// Arbitrary value, based on observation: http://delphigl.de/glcapsviewer/gl_stats_caps_single.php?listreportsbycap=GL_MAX_COMBINED_SHADER_STORAGE_BLOCKS
-		static BufferBinding s_boundSSBOs[s_numSSBOBindings];
+		static BufferBinding s_boundSSBOs[Details::s_numSSBOBindings];
 
     // Atomic Counter buffer
-		static const unsigned int s_numAtomicCounterBindings = 16; /// Arbitrary value, based on observation: http://delphigl.de/glcapsviewer/gl_stats_caps_single.php?listreportsbycap=GL_MAX_COMBINED_ATOMIC_COUNTERS
-		static BufferBinding s_boundAtomicCounters[s_numAtomicCounterBindings];
+		static BufferBinding s_boundAtomicCounters[Details::s_numAtomicCounterBindings];
 
 		// Indirect Draw
 		static BufferId s_boundIndirectDrawBuffer;

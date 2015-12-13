@@ -4,9 +4,9 @@
 namespace gl
 {
 	Buffer::BufferBinding Buffer::s_boundVertexBuffers[s_numVertexBufferBindings];
-	Buffer::BufferBinding Buffer::s_boundUBOs[s_numUBOBindings];
-	Buffer::BufferBinding Buffer::s_boundSSBOs[s_numSSBOBindings];
-  Buffer::BufferBinding Buffer::s_boundAtomicCounters[s_numAtomicCounterBindings];
+	Buffer::BufferBinding Buffer::s_boundUBOs[Details::s_numUBOBindings];
+	Buffer::BufferBinding Buffer::s_boundSSBOs[Details::s_numSSBOBindings];
+  Buffer::BufferBinding Buffer::s_boundAtomicCounters[Details::s_numAtomicCounterBindings];
 	BufferId Buffer::s_boundIndexBuffer = 0;
 	BufferId Buffer::s_boundIndirectDrawBuffer = 0;
 	BufferId Buffer::s_boundIndirectDispatchBuffer = 0;
@@ -87,17 +87,23 @@ namespace gl
 					s_boundVertexBuffers[i].bufferObject = 0;
 			}
 
-			for (unsigned int i = 0; i < s_numUBOBindings; ++i)
+			for (unsigned int i = 0; i < Details::s_numUBOBindings; ++i)
 			{
 				if (s_boundUBOs[i].bufferObject == m_bufferObject)
 					s_boundUBOs[i].bufferObject = 0;
 			}
 			
-			for (unsigned int i = 0; i < s_numSSBOBindings; ++i)
+			for (unsigned int i = 0; i < Details::s_numSSBOBindings; ++i)
 			{
 				if (s_boundSSBOs[i].bufferObject == m_bufferObject)
 					s_boundSSBOs[i].bufferObject = 0;
-			}			
+			}
+
+      for (unsigned int i = 0; i < Details::s_numAtomicCounterBindings; ++i)
+			{
+				if (s_boundAtomicCounters[i].bufferObject == m_bufferObject)
+					s_boundAtomicCounters[i].bufferObject = 0;
+			}
 
 			GL_CALL(glDeleteBuffers, 1, &m_bufferObject);
 		}
@@ -283,7 +289,7 @@ namespace gl
 
 	void Buffer::BindUniformBuffer(BufferId _buffer, GLuint _bindingIndex, GLintptr _offset, GLsizeiptr _size)
 	{
-		GLHELPER_ASSERT(_bindingIndex < s_numUBOBindings, "Glhelper supports only " + std::to_string(s_numUBOBindings) +
+		GLHELPER_ASSERT(_bindingIndex < Details::s_numUBOBindings, "Glhelper supports only " + std::to_string(Details::s_numUBOBindings) +
 			" UBO bindings. See glGet with GL_MAX_UNIFORM_BUFFER_BINDINGS for actual hardware restrictions");
 
 		if (s_boundUBOs[_bindingIndex].bufferObject != _buffer ||
@@ -299,7 +305,7 @@ namespace gl
 
 	void Buffer::BindShaderStorageBuffer(BufferId _buffer, GLuint _bindingIndex, GLintptr _offset, GLsizeiptr _size)
 	{
-		GLHELPER_ASSERT(_bindingIndex < s_numSSBOBindings, "Glhelper supports only " + std::to_string(s_numSSBOBindings) +
+		GLHELPER_ASSERT(_bindingIndex < Details::s_numSSBOBindings, "Glhelper supports only " + std::to_string(Details::s_numSSBOBindings) +
 			" UBO bindings. See glGet with GL_MAX_COMBINED_SHADER_STORAGE_BLOCKS for actual hardware restrictions");
 
 		if (s_boundSSBOs[_bindingIndex].bufferObject != _buffer ||
@@ -315,7 +321,7 @@ namespace gl
 
   void Buffer::BindAtomicCounterBuffer(BufferId _buffer, GLuint _bindingIndex, GLintptr _offset, GLsizeiptr _size)
 	{
-		GLHELPER_ASSERT(_bindingIndex < s_numAtomicCounterBindings, "Glhelper supports only " + std::to_string(s_numAtomicCounterBindings) +
+		GLHELPER_ASSERT(_bindingIndex < Details::s_numAtomicCounterBindings, "Glhelper supports only " + std::to_string(Details::s_numAtomicCounterBindings) +
 			" UBO bindings. See glGet with GL_MAX_COMBINED_ATOMIC_COUNTERS for actual hardware restrictions");
 
 		if (s_boundAtomicCounters[_bindingIndex].bufferObject != _buffer ||
