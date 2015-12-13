@@ -213,7 +213,7 @@ namespace gl
 
     int getIndexForShaderName(const std::string& name);
     int getIndexForPrefixCode();
-    std::string shaderNameForIndex(int index);
+    std::string shaderNameForIndex(int index) const;
 
     std::string filterErrorText(const std::string& text) const;
 

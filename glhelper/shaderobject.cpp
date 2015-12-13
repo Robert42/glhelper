@@ -36,7 +36,7 @@ namespace gl
     return getIndexForShaderName(prefixCodeName);
   }
 
-  std::string ShaderObject::FileIndex::shaderNameForIndex(int index)
+  std::string ShaderObject::FileIndex::shaderNameForIndex(int index) const
   {
     auto i = _shaderNameForIndex.find(index);
 
@@ -55,6 +55,8 @@ namespace gl
   {
     return text;
   }
+#else
+  SHADER_OVERRIDE_SHADER_ERROR_TEXT_FILTER
 #endif
 
 
