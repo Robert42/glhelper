@@ -109,5 +109,7 @@ namespace gl
 
 #define GL_RET_CALL(OpenGLFunction, ...) OpenGLFunction(__VA_ARGS__)
 
+#define GL_RET_CALL_NO_ARGS(OpenGLFunction) OpenGLFunction()
+
 #endif
 }
