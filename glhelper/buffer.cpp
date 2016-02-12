@@ -56,6 +56,19 @@ namespace gl
 		_moved.m_mappedData = nullptr;
 	}
 
+
+  void Buffer::operator = (Buffer&& other)
+  {
+    std::swap(this->m_bufferObject, other.m_bufferObject);
+    std::swap(this->m_sizeInBytes, other.m_sizeInBytes);
+    std::swap(this->m_usageFlags, other.m_usageFlags);
+    std::swap(this->m_mappedDataSize, other.m_mappedDataSize);
+    std::swap(this->m_mappedDataOffset, other.m_mappedDataOffset);
+    std::swap(this->m_mappedData, other.m_mappedData);
+    std::swap(this->m_bufferObject, other.m_bufferObject);
+    std::swap(this->m_mappedData, other.m_mappedData);
+  }
+
     Buffer::~Buffer()
     {
 		if (m_bufferObject != 0)

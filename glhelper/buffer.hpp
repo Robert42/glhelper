@@ -22,7 +22,6 @@ namespace gl
     public:
 		Buffer(const Buffer&) = delete;
 		void operator = (const Buffer&) = delete;
-		void operator = (Buffer&&) = delete;
 
         /// Buffer creation flags
 		/// See flags in http://docs.gl/gl4/glBufferStorage
@@ -56,6 +55,7 @@ namespace gl
 		///		Combination of one or more UsageFlag.
 		Buffer(GLsizeiptr _sizeInBytes, UsageFlag _usageFlags, const void* _data = nullptr);
 		Buffer(Buffer&& _moved);
+    void operator = (Buffer&&);
         ~Buffer();
 
         // Clear this buffer
