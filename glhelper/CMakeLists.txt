@@ -2,9 +2,6 @@ cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
 project(glhelper)
 
-find_package(GLEW)
-find_package(OpenGL)
-
 set(GLHELPER_SOURCE
   buffer.cpp
   buffer.hpp
@@ -48,8 +45,6 @@ set(GLHELPER_SOURCE
 
 add_library(glhelper ${GLHELPER_SOURCE})
 
-target_include_directories(glhelper PUBLIC ${GLEW_INCLUDE_DIRS})
-
-target_link_libraries(glhelper PUBLIC ${GLEW_LIBRARY} ${OPENGL_gl_LIBRARY} ${GLHELPER_ADDITIONAL_LIBRARIES})
+target_link_libraries(glhelper PUBLIC glew ${GLHELPER_ADDITIONAL_LIBRARIES})
 
 target_compile_options(glhelper PUBLIC -std=c++11)
