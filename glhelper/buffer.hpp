@@ -56,6 +56,7 @@ namespace gl
 		Buffer(GLsizeiptr _sizeInBytes, UsageFlag _usageFlags, const void* _data = nullptr);
 		Buffer(Buffer&& _moved);
     void operator = (Buffer&&);
+    Buffer();
         ~Buffer();
 
         // Clear this buffer

@@ -56,6 +56,16 @@ namespace gl
 		_moved.m_mappedData = nullptr;
 	}
 
+  Buffer::Buffer() :
+    m_bufferObject(0),
+		m_sizeInBytes(0),
+		m_usageFlags(IMMUTABLE),
+		m_mappedDataSize(0),
+		m_mappedDataOffset(0),
+		m_mappedData(nullptr)
+  {
+  }
+
 
   void Buffer::operator = (Buffer&& other)
   {
@@ -64,8 +74,6 @@ namespace gl
     std::swap(this->m_usageFlags, other.m_usageFlags);
     std::swap(this->m_mappedDataSize, other.m_mappedDataSize);
     std::swap(this->m_mappedDataOffset, other.m_mappedDataOffset);
-    std::swap(this->m_mappedData, other.m_mappedData);
-    std::swap(this->m_bufferObject, other.m_bufferObject);
     std::swap(this->m_mappedData, other.m_mappedData);
   }
 
@@ -124,6 +132,8 @@ namespace gl
 
 	void* Buffer::Map(GLintptr _offset, GLsizeiptr _numBytes, MapType _mapType, MapWriteFlag _mapWriteFlags)
     {
+    GLHELPER_ASSERT(m_bufferObject != 0, "Can't map an empy buffer");
+
 		// Check against creation flags.
 		GLHELPER_ASSERT(((_mapType == MapType::READ_WRITE || _mapType == MapType::READ) && any(m_usageFlags & UsageFlag::MAP_READ)) ||
 						((_mapType == MapType::READ_WRITE || _mapType == MapType::WRITE) && any(m_usageFlags & UsageFlag::MAP_WRITE)), "Can't map the buffer for read/write since it was not created with the read/write usage flags.");
