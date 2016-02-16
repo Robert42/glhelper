@@ -110,6 +110,17 @@ namespace gl
 	}
 
 
+  void FramebufferObject::BindRead()
+  {
+    GL_CALL(glBindFramebuffer, GL_READ_FRAMEBUFFER, m_framebuffer);
+  }
+
+  void FramebufferObject::UnbindRead()
+  {
+    GL_CALL(glBindFramebuffer, GL_READ_FRAMEBUFFER, 0);
+  }
+
+
 /*	void FramebufferObject::BlitTo(FramebufferObject* pDest, const ezRectU32& srcRect, const ezRectU32& dstRect, GLuint mask, GLuint filter)
 	{
 		glBlitNamedFramebuffer(m_framebuffer, pDest->m_framebuffer, srcRect.x, srcRect.y, srcRect.x + srcRect.width, srcRect.y + srcRect.height,

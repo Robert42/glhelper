@@ -49,6 +49,11 @@ namespace gl
 		/// You'll have to the the viewport on your own! 
 		static void BindBackBuffer();
 
+    /// Binds the framebuffer object (GL_READ_FRAMEBUFFER).
+		void BindRead();
+		/// Resets the binding to zero (GL_READ_FRAMEBUFFER).
+		static void UnbindRead();
+
 		/// Blits this Framebuffer to another one. Afterwards the dest buffer is set for drawing and this buffer is set for reading!
 		/// \param pDest   Backbuffer if NULL
 		/// \attention Will not change the viewport.
