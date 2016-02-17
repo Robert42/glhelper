@@ -622,6 +622,12 @@ namespace gl
 		}
 	}
 
+  void ShaderObject::Deactivate()
+	{
+    GL_CALL(glUseProgram, 0);
+    s_currentlyActiveShaderObject = nullptr;
+  }
+
 	Result ShaderObject::BindUBO(Buffer& _ubo, const std::string& _UBOName) const
 	{
 		auto it = m_uniformBlockInfos.find(_UBOName);

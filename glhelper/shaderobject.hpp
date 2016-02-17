@@ -78,6 +78,7 @@ namespace gl
 		/// 
 		/// You can only activate one program at a time. Checks for redundant state changes.
 		void Activate() const;
+    static void Deactivate();
 
 
 
