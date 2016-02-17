@@ -357,4 +357,13 @@ namespace gl
 			s_boundAtomicCounters[_bindingIndex].stride = _size;
 		}
 	}
+
+
+  GLuint64 Buffer::gpuBufferAddress() const
+  {
+    GLuint64 address;
+    GLuint handle = GetInternHandle();
+    GL_CALL(glGetNamedBufferParameterui64vNV, handle, GL_BUFFER_GPU_ADDRESS_NV, &address);
+    return address;
+  }
 }

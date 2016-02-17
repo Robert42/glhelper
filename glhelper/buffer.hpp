@@ -227,6 +227,8 @@ namespace gl
 		/// Binds as indirect dispatch buffer if not already bound with the same parameters.
 		void BindIndirectDispatchBuffer();
 
+    GLuint64 gpuBufferAddress() const;
+
     private:
 		friend class PersistentRingBuffer;
 
