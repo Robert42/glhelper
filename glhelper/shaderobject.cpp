@@ -312,6 +312,29 @@ namespace gl
 		return AddShader(_type, _sourceCode, _originName, "", nullptr);
 	}
 
+  GLenum ShaderObject::getGLShaderType(ShaderType shaderType)
+  {
+    switch (shaderType)
+		{
+		case ShaderObject::ShaderType::VERTEX:
+			return GL_VERTEX_SHADER;
+		case ShaderObject::ShaderType::FRAGMENT:
+			return GL_FRAGMENT_SHADER;
+		case ShaderObject::ShaderType::EVALUATION:
+			return GL_TESS_EVALUATION_SHADER;
+		case ShaderObject::ShaderType::CONTROL:
+			return GL_TESS_CONTROL_SHADER;
+		case ShaderObject::ShaderType::GEOMETRY:
+			return GL_GEOMETRY_SHADER;
+		case ShaderObject::ShaderType::COMPUTE:
+			return GL_COMPUTE_SHADER;
+		default:
+			GLHELPER_ASSERT(false, "Unknown shader type");
+			return GL_VERTEX_SHADER;
+		}
+
+  }
+
 	Result ShaderObject::AddShader(ShaderType _type, const std::string& _sourceCode, const std::string& _originName, const std::string& _prefixCode, FileIndex* fileIndex)
 	{
 		GLHELPER_ASSERT(_sourceCode != "", "Shader source code is empty!");
@@ -321,31 +344,7 @@ namespace gl
 
 		// create shader
 		GLuint shaderObjectTemp = 0;
-		switch (_type)
-		{
-		case ShaderObject::ShaderType::VERTEX:
-			shaderObjectTemp = GL_RET_CALL(glCreateShader, GL_VERTEX_SHADER);
-			break;
-		case ShaderObject::ShaderType::FRAGMENT:
-			shaderObjectTemp = GL_RET_CALL(glCreateShader, GL_FRAGMENT_SHADER);
-			break;
-		case ShaderObject::ShaderType::EVALUATION:
-			shaderObjectTemp = GL_RET_CALL(glCreateShader, GL_TESS_EVALUATION_SHADER);
-			break;
-		case ShaderObject::ShaderType::CONTROL:
-			shaderObjectTemp = GL_RET_CALL(glCreateShader, GL_TESS_CONTROL_SHADER);
-			break;
-		case ShaderObject::ShaderType::GEOMETRY:
-			shaderObjectTemp = GL_RET_CALL(glCreateShader, GL_GEOMETRY_SHADER);
-			break;
-		case ShaderObject::ShaderType::COMPUTE:
-			shaderObjectTemp = GL_RET_CALL(glCreateShader, GL_COMPUTE_SHADER);
-			break;
-
-		default:
-			GLHELPER_ASSERT(false, "Unknown shader type");
-			break;
-		}
+    shaderObjectTemp = GL_RET_CALL(glCreateShader, getGLShaderType(_type));
 
 		// compile shader
 		const char* sourceRaw = _sourceCode.c_str();

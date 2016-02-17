@@ -34,6 +34,8 @@ namespace gl
 			NUM_SHADER_TYPES
 		};
 
+    static GLenum getGLShaderType(ShaderType shaderType);
+
 		/// Constructs ShaderObject
 		/// 
 		/// To add code use AddShaderFromFile/AddShaderFromSource and call CreateProgram if you are done.
