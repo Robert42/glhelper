@@ -150,7 +150,29 @@ namespace gl
 			_moved.m_shader[i].shaderObject = 0;
 		}
 		_moved.m_program = 0;
+    _moved.m_name = std::string();
 	}
+
+  void ShaderObject::operator=(ShaderObject&& _moved)
+  {
+    m_name.swap(_moved.m_name);
+		std::swap(m_program, _moved.m_program);
+		std::swap(m_containsAssembledProgram, _moved.m_containsAssembledProgram);
+		m_filesPerShaderType.swap(_moved.m_filesPerShaderType);
+
+		m_globalUniformInfo.swap(_moved.m_globalUniformInfo);
+		m_uniformBlockInfos.swap(_moved.m_uniformBlockInfos);
+		m_shaderStorageInfos.swap(_moved.m_shaderStorageInfos);
+
+		std::swap(m_totalProgramInputCount,_moved.m_totalProgramInputCount);
+		std::swap(m_totalProgramOutputCount,_moved.m_totalProgramOutputCount);
+
+    for(unsigned int i = 0; i < static_cast<unsigned int>(ShaderType::NUM_SHADER_TYPES); ++i)
+		{
+			m_shader[i] = std::move(_moved.m_shader[i]);
+			_moved.m_shader[i].shaderObject = 0;
+		}
+  }
 
 	ShaderObject::~ShaderObject()
 	{

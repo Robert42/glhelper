@@ -19,8 +19,7 @@ namespace gl
 		typedef std::unordered_map<std::string, UniformBufferMetaInfo> UniformBlockInfos;
 
 		ShaderObject(const ShaderObject&) = delete;
-		void operator = (const ShaderObject&) = delete;
-		void operator = (ShaderObject&&) = delete;
+		void operator = (const ShaderObject&) = delete;;
 
 		enum class ShaderType
 		{
@@ -43,6 +42,8 @@ namespace gl
 		ShaderObject(const std::string& _shaderName);
 		ShaderObject(ShaderObject&& _moved);
 		~ShaderObject();
+
+    void operator = (ShaderObject&&_moved);
 
 		const std::string& GetName() const { return m_name; }
 
@@ -169,7 +170,7 @@ namespace gl
 
 
 		/// Name for identifying at runtime
-		const std::string m_name;
+		std::string m_name;
 
 		// the program itself
 		ProgramId m_program;
