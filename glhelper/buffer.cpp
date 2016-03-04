@@ -363,6 +363,10 @@ namespace gl
   {
     GLuint64 address;
     GLuint handle = GetInternHandle();
+
+    if(handle == 0)
+      return 0;
+
     GL_CALL(glGetNamedBufferParameterui64vNV, handle, GL_BUFFER_GPU_ADDRESS_NV, &address);
     return address;
   }
