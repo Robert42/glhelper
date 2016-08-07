@@ -229,6 +229,8 @@ namespace gl
 
     GLuint64 gpuBufferAddress() const;
 
+    bool isMapped() const {return m_mappedData != nullptr;}
+
     private:
 		friend class PersistentRingBuffer;
 
