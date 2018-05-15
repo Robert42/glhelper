@@ -45,10 +45,6 @@ set(GLHELPER_SOURCE
 
 add_library(glhelper STATIC ${GLHELPER_SOURCE})
 
-if(${GLHELPER_USE_GLEW} OR (NOT DEFINED GLHELPER_USE_GLEW))
-  set(GLHELPER_ADDITIONAL_LIBRARIES ${GLHELPER_ADDITIONAL_LIBRARIES} glew)
-endif()
-
 target_link_libraries(glhelper PUBLIC ${GLHELPER_ADDITIONAL_LIBRARIES})
 
 target_compile_options(glhelper PUBLIC -std=c++11)
