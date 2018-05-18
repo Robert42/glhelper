@@ -17,8 +17,7 @@ namespace gl
 	{
 	public:
 		VertexArrayObject(const VertexArrayObject&) = delete;
-		void operator = (const VertexArrayObject&) = delete;
-		void operator = (VertexArrayObject&&) = delete;
+    void operator = (const VertexArrayObject&) = delete;
 
 		/// Info about a single vertex attribute.
 		///
@@ -99,6 +98,8 @@ namespace gl
 		VertexArrayObject(const std::initializer_list<Attribute>& _vertexAttributes, const std::initializer_list<GLuint>& _vertexBindingDivisors = {});
 		VertexArrayObject(VertexArrayObject&& _moved);
 		~VertexArrayObject();
+
+    void operator=(VertexArrayObject&& vao);
 
 		/// Binds vertex array if not already bound.
 		void Bind();

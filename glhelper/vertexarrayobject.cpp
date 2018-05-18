@@ -45,9 +45,9 @@ namespace gl
 	};
 
 
-	VertexArrayObject* VertexArrayObject::s_boundVertexArray = nullptr;
+  VertexArrayObject* VertexArrayObject::s_boundVertexArray = nullptr;
 
-	VertexArrayObject::VertexArrayObject(const std::initializer_list<Attribute>& _vertexAttributes, const std::initializer_list<GLuint>& _vertexBindingDivisors) :
+  VertexArrayObject::VertexArrayObject(const std::initializer_list<Attribute>& _vertexAttributes, const std::initializer_list<GLuint>& _vertexBindingDivisors) :
 		m_vertexAttributes(_vertexAttributes)
 	{
 		GL_CALL(glCreateVertexArrays, 1, &m_vao);
@@ -125,6 +125,13 @@ namespace gl
 			GL_CALL(glDeleteVertexArrays, 1, &m_vao);
 		}
 	}
+
+  void VertexArrayObject::operator=(VertexArrayObject&& vao)
+  {
+    std::swap(this->m_vao, vao.m_vao);
+    std::swap(this->m_vertexAttributes, vao.m_vertexAttributes);
+    std::swap(this->m_vertexStrides, vao.m_vertexStrides);
+  }
 
 	void VertexArrayObject::Bind()
 	{
