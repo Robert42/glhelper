@@ -153,7 +153,7 @@ namespace gl
 		// Binding functions
 
 		/// \see Buffer::BindVertexBuffer
-		void BindVertexBuffer(GLuint _bindingIndex, GLintptr _offset, GLsizei _stride);
+    void BindVertexBuffer(GLuint _bindingIndex, GLintptr _offset, GLsizei _stride) const;
 
 		/// Binds as vertex buffer on a given slot if not already bound with the same parameters.
 		///
@@ -164,18 +164,18 @@ namespace gl
 		///		The offset of the first element of the buffer.
 		/// \param stride
 		///		The distance between elements within the buffer.
-		static void BindVertexBuffer(BufferId _buffer, GLuint _bindingIndex, GLintptr _offset, GLsizei _stride);
+    static void BindVertexBuffer(BufferId _buffer, GLuint _bindingIndex, GLintptr _offset, GLsizei _stride);
 
 
 		/// Binds as index buffer (vertex element array) if not already bound with the same parameters.
-		void BindIndexBuffer();
+    void BindIndexBuffer() const;
 
 
 		/// \see Buffer::BindUniformBuffer
-		void BindUniformBuffer(GLuint _bindingIndex, GLintptr _offset, GLsizeiptr _size);
+    void BindUniformBuffer(GLuint _bindingIndex, GLintptr _offset, GLsizeiptr _size) const;
 		/// Binds entire buffer as uniform buffer.
 		/// \see Buffer::BindUniformBuffer
-		void BindUniformBuffer(GLuint _bindingIndex);
+    void BindUniformBuffer(GLuint _bindingIndex) const;
 
 		/// Binds as uniform buffer on a given slot if not already bound with the same parameters.
 		///
@@ -185,14 +185,14 @@ namespace gl
 		///		The offset of the first element of the buffer.
 		/// \param stride
 		///		The amount of data in machine units that can be read from the buffer object while used as an indexed target.
-		static void BindUniformBuffer(BufferId _buffer, GLuint _bindingIndex, GLintptr _offset, GLsizeiptr _size);
+    static void BindUniformBuffer(BufferId _buffer, GLuint _bindingIndex, GLintptr _offset, GLsizeiptr _size);
 
 
 		/// \see Buffer::BindShaderStorageBuffer
-		void BindShaderStorageBuffer(GLuint _bindingIndex, GLintptr _offset, GLsizeiptr _size);
+    void BindShaderStorageBuffer(GLuint _bindingIndex, GLintptr _offset, GLsizeiptr _size) const;
 		/// Binds entire buffer as shader storage buffer.
 		/// \see Buffer::BindShaderStorageBuffer
-		void BindShaderStorageBuffer(GLuint _bindingIndex);
+    void BindShaderStorageBuffer(GLuint _bindingIndex) const;
 
 		/// Binds as uniform buffer on a given slot if not already bound with the same parameters.
 		///
@@ -202,14 +202,14 @@ namespace gl
 		///		The offset of the first element of the buffer.
 		/// \param size
 		///		The amount of data in machine units that can be read from the buffer object while used as an indexed target.
-		static void BindShaderStorageBuffer(BufferId _buffer, GLuint _bindingIndex, GLintptr _offset, GLsizeiptr _size);
+    static void BindShaderStorageBuffer(BufferId _buffer, GLuint _bindingIndex, GLintptr _offset, GLsizeiptr _size);
 
 
     /// \see Buffer::BindAtomicCounterBuffer
-		void BindAtomicCounterBuffer(GLuint _bindingIndex, GLintptr _offset, GLsizeiptr _size);
+    void BindAtomicCounterBuffer(GLuint _bindingIndex, GLintptr _offset, GLsizeiptr _size) const;
 		/// Binds entire buffer as atomic counter buffer.
 		/// \see Buffer::BindAtomicCounterBuffer
-		void BindAtomicCounterBuffer(GLuint _bindingIndex);
+    void BindAtomicCounterBuffer(GLuint _bindingIndex) const;
 
 		/// Binds as uniform buffer on a given slot if not already bound with the same parameters.
 		///
@@ -223,9 +223,9 @@ namespace gl
 
 
 		/// Binds as indirect draw buffer if not already bound with the same parameters.
-		void BindIndirectDrawBuffer();
+    void BindIndirectDrawBuffer() const;
 		/// Binds as indirect dispatch buffer if not already bound with the same parameters.
-		void BindIndirectDispatchBuffer();
+    void BindIndirectDispatchBuffer() const;
 
     GLuint64 gpuBufferAddress() const;
 

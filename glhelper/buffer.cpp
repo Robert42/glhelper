@@ -267,7 +267,7 @@ namespace gl
 			GL_CALL(glGetNamedBufferSubData, m_bufferObject, _offset, _numBytes, _data);
     }
 
-	void Buffer::BindVertexBuffer(BufferId _buffer, GLuint _bindingIndex, GLintptr _offset, GLsizei _stride)
+  void Buffer::BindVertexBuffer(BufferId _buffer, GLuint _bindingIndex, GLintptr _offset, GLsizei _stride)
 	{
 		GLHELPER_ASSERT(_bindingIndex < s_numVertexBufferBindings, "Glhelper supports only " + std::to_string(s_numVertexBufferBindings) +
 			" bindings. See glGet with GL_MAX_VERTEX_ATTRIB_BINDINGS for actual hardware restrictions");
@@ -283,7 +283,7 @@ namespace gl
 		}
 	}
 
-	void Buffer::BindIndexBuffer()
+  void Buffer::BindIndexBuffer() const
 	{
 		if (s_boundIndexBuffer != m_bufferObject)
 		{
@@ -292,7 +292,7 @@ namespace gl
 		}
 	}
 
-	void Buffer::BindIndirectDrawBuffer()
+  void Buffer::BindIndirectDrawBuffer() const
 	{
 		if (s_boundIndirectDrawBuffer != m_bufferObject)
 		{
@@ -301,7 +301,7 @@ namespace gl
 		}
 	}
 
-	void Buffer::BindIndirectDispatchBuffer()
+  void Buffer::BindIndirectDispatchBuffer() const
 	{
 		if (s_boundIndirectDispatchBuffer != m_bufferObject)
 		{
