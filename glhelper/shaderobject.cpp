@@ -219,11 +219,23 @@ namespace gl
 		return result;
 	}
 
+	bool can_read(const std::string& filepath)
+	{
+		std::ifstream file(filepath.c_str());
+		if (file.bad() || file.fail())
+			return false;
+		else
+		return true;
+	}
+
 	/// \param _beforeIncludedFiles
 	///		Does not include THIS file, but all files before.
-	std::string ShaderObject::ReadShaderFromFile(const std::string& _shaderFilename, const std::string& _prefixCode,
+	std::string ShaderObject::ReadShaderFromFile(std::string _shaderFilename, const std::string& _prefixCode,
 												 FileIndex* _fileIndex, std::unordered_set<std::string>& _beforeIncludedFiles, std::unordered_set<std::string>& _allReadFiles)
 	{
+		if(!can_read(_shaderFilename))
+			_shaderFilename = SHADER_EXPAND_GLOBAL_INCLUDE(_shaderFilename);
+
 		// open file
 		std::ifstream file(_shaderFilename.c_str());
 		if (file.bad() || file.fail())

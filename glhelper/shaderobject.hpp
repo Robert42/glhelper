@@ -154,7 +154,7 @@ namespace gl
 		/// Reads shader source code from file and performs parsing of #include directives
 		/// \param fileIndex	This will used as second parameter for each #line macro. It is a kind of file identifier.
 		/// \remarks Uses a lot of potentially slow string operations.
-		static std::string ReadShaderFromFile(const std::string& shaderFilename, const std::string& prefixCode,
+		static std::string ReadShaderFromFile(std::string shaderFilename, const std::string& prefixCode,
 												FileIndex* fileIndex, std::unordered_set<std::string>& _beforeIncludedFiles, std::unordered_set<std::string>& _allReadFiles);
 
 		/// Internal function called by AddShaderFromSource and AddShaderFromFile
