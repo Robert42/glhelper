@@ -259,7 +259,7 @@ namespace gl
     {
 		GLHELPER_ASSERT(_numBytes + _offset <= m_sizeInBytes, "Memory range is outside the buffer!");
 
-		if (any(m_usageFlags & UsageFlag::SUB_DATA_UPDATE))
+    if (any(m_usageFlags & UsageFlag::SUB_DATA_UPDATE) == false)
 			GLHELPER_LOG_ERROR("The buffer was not created with the SUB_DATA_UPDATE flag. Unable to get memory!");
 		else if (m_mappedData != NULL && (static_cast<GLenum>(m_usageFlags & UsageFlag::MAP_PERSISTENT)))
 			GLHELPER_LOG_ERROR("Unable to get memory for currently mapped buffer that was created without the PERSISTENT flag.");
