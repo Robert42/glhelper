@@ -48,6 +48,11 @@ namespace gl
   VertexArrayObject* VertexArrayObject::s_boundVertexArray = nullptr;
 
   VertexArrayObject::VertexArrayObject(const std::initializer_list<Attribute>& _vertexAttributes, const std::initializer_list<GLuint>& _vertexBindingDivisors) :
+    VertexArrayObject(std::vector<Attribute>(_vertexAttributes), _vertexBindingDivisors)
+  {
+  }
+
+  VertexArrayObject::VertexArrayObject(std::vector<Attribute>&& _vertexAttributes, const std::initializer_list<GLuint>& _vertexBindingDivisors) :
 		m_vertexAttributes(_vertexAttributes)
 	{
 		GL_CALL(glCreateVertexArrays, 1, &m_vao);

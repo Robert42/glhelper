@@ -96,6 +96,7 @@ namespace gl
 		///		List of binding vertex binding divisors. Position in list gives affected vertex binding.
 		///		If divisor value is non-zero, the attributes advance once per divisor instances of the set(s) of vertices being rendered.
 		VertexArrayObject(const std::initializer_list<Attribute>& _vertexAttributes, const std::initializer_list<GLuint>& _vertexBindingDivisors = {});
+    VertexArrayObject(std::vector<Attribute>&& _vertexAttributes, const std::initializer_list<GLuint>& _vertexBindingDivisors = {});
 		VertexArrayObject(VertexArrayObject&& _moved);
 		~VertexArrayObject();
 
